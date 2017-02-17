@@ -1,0 +1,72 @@
+<div class="main-nav-wrapper">
+    <nav class="main-nav" layout="row" layout-align="start center">
+        <div class="logo">
+            <span class="logo-first">Counter</span>
+            <span class="logo-second">App</span>
+        </div>
+
+        <!--show in search mode-->
+        <div flex="10" ng-show="$ctrl.searchMode"></div>
+        <input type="text" class="search-input" ng-model="$ctrl.filter" flex ng-show="$ctrl.searchMode"
+               placeholder="Busque por título de contadores" focus-me="$ctrl.searchMode">
+        <md-button class="md-icon-button md-primary" aria-label="Cerrar búsqueda"
+                   ng-click="$ctrl.searchMode = false; $ctrl.filter = ''" ng-show="$ctrl.searchMode">
+            <md-icon>close</md-icon>
+        </md-button>
+
+        <!--show default-->
+        <div flex ng-hide="$ctrl.searchMode"></div>
+        <md-button class="md-icon-button md-primary" aria-label="Buscar" ng-click="$ctrl.searchMode = true"
+                   ng-hide="$ctrl.searchMode">
+            <md-icon>search</md-icon>
+        </md-button>
+    </nav>
+</div>
+<div layout="row" layout-fill>
+    <div flex></div>
+    <div flex="nogrow" class="main-content" md-whiteframe layout="column" ng-class="{'gt-sm': $ctrl.$mdMedia('gt-sm')}">
+        <h4>Gestione contadores</h4>
+        <md-progress-linear md-mode="indeterminate" ng-show="$ctrl.pending"></md-progress-linear>
+        <md-divider ng-hide="$ctrl.pending"></md-divider>
+        <md-content flex class="counter-list" ng-class="{'gt-sm': $ctrl.$mdMedia('gt-sm')}">
+            <md-list>
+                <div ng-repeat="counter in $ctrl.counters | filter: {title: $ctrl.filter} track by counter.id">
+                    <md-list-item>
+                        <md-button class="md-fab md-mini" aria-label="Avatar">
+                            <span>{{counter.title[0]}}</span>
+                        </md-button>
+                        <span>{{counter.title}}</span>
+                        <md-button class="md-icon-button md-secondary" aria-label="Incrementar"
+                                   ng-click="$ctrl.increment(counter)">
+                            <md-icon>add</md-icon>
+                        </md-button>
+                        <span class="md-secondary">{{counter.count}}</span>
+                        <md-button class="md-icon-button md-secondary" aria-label="Decrementar"
+                                   ng-click="$ctrl.decrement(counter)">
+                            <md-icon>remove</md-icon>
+                        </md-button>
+                        <div flex="5" class="md-secondary"></div>
+                        <md-button class="md-icon-button md-secondary" aria-label="Eliminar"
+                                   ng-click="$ctrl.remove(counter)">
+                            <md-icon>delete</md-icon>
+                        </md-button>
+                    </md-list-item>
+                    <md-progress-linear md-mode="indeterminate" ng-show="counter.$pending"></md-progress-linear>
+                </div>
+            </md-list>
+            <div ng-hide="$ctrl.counters.length" layout="column" layout-align="center center">
+                <img src="assets/sad.jpg" class="sad-img">
+                <p class="text-not-data">Por favor, cree contadores usando el bontón más</p>
+            </div>
+        </md-content>
+        <md-divider></md-divider>
+        <h5>Total de contadores: {{$ctrl.counters.length}}</h5>
+        <div layout="row" layout-align="center">
+            <md-button class="md-fab md-mini md-primary" aria-label="Adicionar Contador"
+                       ng-click="$ctrl.showAddDialog($event)">
+                <md-icon>add</md-icon>
+            </md-button>
+        </div>
+    </div>
+    <div flex></div>
+</div>
